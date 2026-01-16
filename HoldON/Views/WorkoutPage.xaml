@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:HoldON.ViewModels"
+             xmlns:models="clr-namespace:HoldON.Models"
+             x:DataType="viewmodels:WorkoutViewModel"
+             x:Class="HoldON.Views.WorkoutPage"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid RowDefinitions="Auto, *, Auto" Padding="0">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Padding="20,10" BackgroundColor="{StaticResource Background}">
+            <Label Grid.Column="0" Text="✕" TextColor="{StaticResource White}" FontSize="24" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SaveWorkoutCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1" Text="{Binding WorkoutName}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+            <Label Grid.Column="2" Text="Zaključi trening" TextColor="{StaticResource Primary}" FontSize="14" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SaveWorkoutCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- Exercise List -->
+        <ScrollView Grid.Row="1" Padding="20,0">
+            <VerticalStackLayout BindableLayout.ItemsSource="{Binding CurrentExercises}" Spacing="15" Margin="0,15,0,15">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:ExerciseEntry">
+                        <Frame Style="{StaticResource StrongerCard}" Padding="20">
+                            <VerticalStackLayout Spacing="12">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Label Grid.Column="0" Text="{Binding Exercise.Name}"
+                                           TextColor="{StaticResource White}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"/>
+                                    <Label Grid.Column="1" Text="⌄" TextColor="{StaticResource Gray400}" FontSize="20"/>
+                                </Grid>
+                                <Label Text="{Binding Sets.Count, StringFormat='{0} serij'}"
+                                       TextColor="{StaticResource Gray400}"
+                                       FontSize="12"/>
+
+                                <!-- Sets -->
+                                <VerticalStackLayout BindableLayout.ItemsSource="{Binding Sets}" Spacing="8">
+                                    <BindableLayout.ItemTemplate>
+                                        <DataTemplate x:DataType="models:WorkoutSet">
+                                            <Frame BackgroundColor="{StaticResource Tertiary}"
+                                                   CornerRadius="12"
+                                                   Padding="15"
+                                                   HasShadow="False">
+                                                <Grid ColumnDefinitions="Auto, *, *, Auto" ColumnSpacing="15">
+                                                    <Image Grid.Column="0"
+                                                           Source="checkmark_circle.png"
+                                                           WidthRequest="24"
+                                                           HeightRequest="24"/>
+                                                    <VerticalStackLayout Grid.Column="1">
+                                                        <Label Text="Serija" TextColor="White" FontSize="11" Opacity="0.7"/>
+                                                        <Label Text="{Binding SetNumber}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                                                    </VerticalStackLayout>
+                                                    <Frame Grid.Column="2" BackgroundColor="#00000040" Padding="8" CornerRadius="8" HasShadow="False">
+                                                        <HorizontalStackLayout Spacing="5">
+                                                            <Entry Text="{Binding Weight}"
+                                                                   TextColor="White"
+                                                                   WidthRequest="50"
+                                                                   HorizontalTextAlignment="Center"
+                                                                   Keyboard="Numeric"
+                                                                   BackgroundColor="Transparent"
+                                                                   Placeholder="0"/>
+                                                            <Label Text="kg" TextColor="White" VerticalOptions="Center"/>
+                                                        </HorizontalStackLayout>
+                                                    </Frame>
+                                                    <Frame Grid.Column="3" BackgroundColor="#00000040" Padding="8" CornerRadius="8" HasShadow="False">
+                                                        <HorizontalStackLayout Spacing="5">
+                                                            <Entry Text="{Binding Reps}"
+                                                                   TextColor="White"
+                                                                   WidthRequest="50"
+                                                                   HorizontalTextAlignment="Center"
+                                                                   Keyboard="Numeric"
+                                                                   BackgroundColor="Transparent"
+                                                                   Placeholder="0"/>
+                                                            <Label Text="ponovitev" TextColor="White" VerticalOptions="Center"/>
+                                                        </HorizontalStackLayout>
+                                                    </Frame>
+                                                </Grid>
+                                            </Frame>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                </VerticalStackLayout>
+
+                                <Button Text="+ Dodaj serijo"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:WorkoutViewModel}}, Path=AddSetCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="{StaticResource Gray600}"
+                                        BorderWidth="1"
+                                        TextColor="{StaticResource White}"
+                                        FontSize="14"
+                                        CornerRadius="10"
+                                        HeightRequest="45"
+                                        Margin="0,5,0,0"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Actions -->
+        <Frame Grid.Row="2" BackgroundColor="{StaticResource Background}" Padding="20,10" HasShadow="True" CornerRadius="0">
+            <Button Text="+ Dodaj vajo"
+                    Command="{Binding AddExerciseCommand}"
+                    BackgroundColor="{StaticResource White}"
+                    TextColor="{StaticResource Background}"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    CornerRadius="25"
+                    HeightRequest="55"/>
+        </Frame>
+    </Grid>
+</ContentPage>

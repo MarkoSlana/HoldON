@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:HoldON.ViewModels"
+             xmlns:models="clr-namespace:HoldON.Models"
+             x:DataType="viewmodels:WorkoutPlansViewModel"
+             x:Class="HoldON.Views.WorkoutPlansPage"
+             BackgroundColor="{StaticResource Background}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20">
+            <!-- Header -->
+            <Label Text="Moj program"
+                   FontSize="28"
+                   TextColor="{StaticResource White}"
+                   FontAttributes="Bold"/>
+
+            <!-- Plan Info -->
+            <Frame Style="{StaticResource StrongerCard}" Padding="20">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding CurrentPlan.Name}"
+                           TextColor="{StaticResource White}"
+                           FontSize="20"
+                           FontAttributes="Bold"/>
+                    <Label Text="{Binding CurrentPlan.Description}"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="13"/>
+                    <Grid ColumnDefinitions="*, *" ColumnSpacing="15" Margin="0,10,0,0">
+                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                            <Label Text="Cilj" TextColor="{StaticResource Gray400}" FontSize="11"/>
+                            <Label Text="{Binding CurrentPlan.Goal}" TextColor="{StaticResource Primary}" FontSize="14" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="5">
+                            <Label Text="Dni/teden" TextColor="{StaticResource Gray400}" FontSize="11"/>
+                            <Label Text="{Binding CurrentPlan.DaysPerWeek, StringFormat='{0} dni'}" TextColor="{StaticResource Primary}" FontSize="14" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Weekly Schedule -->
+            <Label Text="Tedenski načrt"
+                   TextColor="{StaticResource White}"
+                   FontSize="18"
+                   FontAttributes="Bold"/>
+
+            <CollectionView ItemsSource="{Binding WorkoutDays}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:WorkoutDay">
+                        <Frame Style="{StaticResource StrongerCard}"
+                               Padding="15"
+                               Margin="0,0,0,10">
+                            <VerticalStackLayout Spacing="10">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding DayName}"
+                                           TextColor="{StaticResource White}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"/>
+                                    <Frame Grid.Column="1"
+                                           BackgroundColor="{StaticResource Primary}"
+                                           Padding="8,4"
+                                           CornerRadius="10"
+                                           HasShadow="False"
+                                           BorderColor="Transparent"
+                                           IsVisible="{Binding IsRestDay, Converter={StaticResource InvertBoolConverter}}">
+                                        <Label Text="{Binding Exercises.Count, StringFormat='{0} vaj'}"
+                                               TextColor="{StaticResource White}"
+                                               FontSize="10"
+                                               FontAttributes="Bold"/>
+                                    </Frame>
+                                </Grid>
+
+                                <Label Text="{Binding Focus}"
+                                       TextColor="{StaticResource Primary}"
+                                       FontSize="14"
+                                       FontAttributes="Bold"
+                                       IsVisible="{Binding IsRestDay, Converter={StaticResource InvertBoolConverter}}"/>
+
+                                <!-- Exercises List -->
+                                <VerticalStackLayout Spacing="8" IsVisible="{Binding IsRestDay, Converter={StaticResource InvertBoolConverter}}">
+                                    <CollectionView ItemsSource="{Binding Exercises}">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate x:DataType="models:PlannedExercise">
+                                                <Grid ColumnDefinitions="*, Auto" Padding="10,5">
+                                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                        <Label Text="{Binding Name}"
+                                                               TextColor="{StaticResource White}"
+                                                               FontSize="13"/>
+                                                        <Label Text="{Binding Notes}"
+                                                               TextColor="{StaticResource Gray500}"
+                                                               FontSize="11"
+                                                               IsVisible="{Binding Notes, Converter={StaticResource IsNotNullConverter}}"/>
+                                                    </VerticalStackLayout>
+                                                    <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="End">
+                                                        <Label TextColor="{StaticResource Gray400}" FontSize="12">
+                                                            <Label.Text>
+                                                                <MultiBinding StringFormat="{}{0} × {1}">
+                                                                    <Binding Path="Sets" />
+                                                                    <Binding Path="Reps" />
+                                                                </MultiBinding>
+                                                            </Label.Text>
+                                                        </Label>
+                                                        <Label Text="{Binding RestTime, StringFormat='Počitek: {0}'}"
+                                                               TextColor="{StaticResource Gray500}"
+                                                               FontSize="10"/>
+                                                    </VerticalStackLayout>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </VerticalStackLayout>
+
+                                <!-- Rest Day Message -->
+                                <Label Text="💤 Dan počitka"
+                                       TextColor="{StaticResource Gray400}"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"
+                                       IsVisible="{Binding IsRestDay}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <BoxView HeightRequest="20"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="HoldON.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:HoldON"
+    xmlns:views="clr-namespace:HoldON.Views"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="{StaticResource Background}"
+    Shell.TabBarUnselectedColor="{StaticResource Gray400}"
+    Shell.TabBarTitleColor="{StaticResource Primary}"
+    Shell.TabBarForegroundColor="{StaticResource Primary}"
+    Title="Stronger">
+
+    <Shell.Resources>
+        <FontImageSource x:Key="HomeIcon"
+                         Glyph="🏠"
+                         FontFamily="Arial"
+                         Size="24"
+                         Color="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+        <FontImageSource x:Key="ProgressIcon"
+                         Glyph="📊"
+                         FontFamily="Arial"
+                         Size="24"
+                         Color="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+        <FontImageSource x:Key="WorkoutIcon"
+                         Glyph="💪"
+                         FontFamily="Arial"
+                         Size="28"
+                         Color="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
+        <FontImageSource x:Key="CommunityIcon"
+                         Glyph="👥"
+                         FontFamily="Arial"
+                         Size="24"
+                         Color="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+        <FontImageSource x:Key="ProfileIcon"
+                         Glyph="👤"
+                         FontFamily="Arial"
+                         Size="24"
+                         Color="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}" />
+    </Shell.Resources>
+
+    <TabBar>
+        <Tab Title="Domov">
+            <Tab.Icon>
+                <FontImageSource Glyph="🏠" FontFamily="Arial" Size="24"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage" />
+        </Tab>
+        <Tab Title="Napredek">
+            <Tab.Icon>
+                <FontImageSource Glyph="📊" FontFamily="Arial" Size="24"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:ProgressPage}" Route="ProgressPage" />
+        </Tab>
+        <Tab Title="">
+            <Tab.Icon>
+                <FontImageSource Glyph="💪" FontFamily="Arial" Size="28"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:WorkoutPage}" Route="WorkoutPage" />
+        </Tab>
+        <Tab Title="Skupnost">
+            <Tab.Icon>
+                <FontImageSource Glyph="👥" FontFamily="Arial" Size="24"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:CommunityPage}" Route="CommunityPage" />
+        </Tab>
+        <Tab Title="Profil">
+            <Tab.Icon>
+                <FontImageSource Glyph="👤" FontFamily="Arial" Size="24"/>
+            </Tab.Icon>
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
+        </Tab>
+    </TabBar>
+
+</Shell>
