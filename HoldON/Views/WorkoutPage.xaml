@@ -55,32 +55,36 @@
                                                            WidthRequest="24"
                                                            HeightRequest="24"/>
                                                     <VerticalStackLayout Grid.Column="1">
-                                                        <Label Text="Serija" TextColor="White" FontSize="11" Opacity="0.7"/>
-                                                        <Label Text="{Binding SetNumber}" TextColor="White" FontSize="16" FontAttributes="Bold"/>
+                                                        <Label Text="Serija" TextColor="White" FontSize="12" Opacity="0.7"/>
+                                                        <Label Text="{Binding SetNumber}" TextColor="White" FontSize="18" FontAttributes="Bold"/>
                                                     </VerticalStackLayout>
-                                                    <Frame Grid.Column="2" BackgroundColor="#00000040" Padding="8" CornerRadius="8" HasShadow="False">
-                                                        <HorizontalStackLayout Spacing="5">
+                                                    <Frame Grid.Column="2" BackgroundColor="#00000040" Padding="10" CornerRadius="8" HasShadow="False">
+                                                        <VerticalStackLayout Spacing="2">
+                                                            <Label Text="kg" TextColor="White" FontSize="11" Opacity="0.7" HorizontalOptions="Center"/>
                                                             <Entry Text="{Binding Weight}"
                                                                    TextColor="White"
-                                                                   WidthRequest="50"
+                                                                   WidthRequest="60"
                                                                    HorizontalTextAlignment="Center"
                                                                    Keyboard="Numeric"
                                                                    BackgroundColor="Transparent"
+                                                                   FontSize="16"
+                                                                   FontAttributes="Bold"
                                                                    Placeholder="0"/>
-                                                            <Label Text="kg" TextColor="White" VerticalOptions="Center"/>
-                                                        </HorizontalStackLayout>
+                                                        </VerticalStackLayout>
                                                     </Frame>
-                                                    <Frame Grid.Column="3" BackgroundColor="#00000040" Padding="8" CornerRadius="8" HasShadow="False">
-                                                        <HorizontalStackLayout Spacing="5">
+                                                    <Frame Grid.Column="3" BackgroundColor="#00000040" Padding="10" CornerRadius="8" HasShadow="False">
+                                                        <VerticalStackLayout Spacing="2">
+                                                            <Label Text="ponovitev" TextColor="White" FontSize="11" Opacity="0.7" HorizontalOptions="Center"/>
                                                             <Entry Text="{Binding Reps}"
                                                                    TextColor="White"
-                                                                   WidthRequest="50"
+                                                                   WidthRequest="60"
                                                                    HorizontalTextAlignment="Center"
                                                                    Keyboard="Numeric"
                                                                    BackgroundColor="Transparent"
+                                                                   FontSize="16"
+                                                                   FontAttributes="Bold"
                                                                    Placeholder="0"/>
-                                                            <Label Text="ponovitev" TextColor="White" VerticalOptions="Center"/>
-                                                        </HorizontalStackLayout>
+                                                        </VerticalStackLayout>
                                                     </Frame>
                                                 </Grid>
                                             </Frame>

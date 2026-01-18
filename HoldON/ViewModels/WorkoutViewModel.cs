@@ -12,6 +12,16 @@ public partial class WorkoutViewModel : BaseViewModel
     private readonly DatabaseService _databaseService;
     private int _currentUserId = 1; // TODO: Replace with actual user authentication
 
+    // Mapping exercise names to database IDs
+    private readonly Dictionary<string, int> _exerciseNameToId = new()
+    {
+        { "Bench Press", 1 },
+        { "Squat", 2 },
+        { "Deadlift", 3 },
+        { "Shoulder Press", 4 },
+        { "Pull-up", 5 }
+    };
+
     [ObservableProperty]
     private ObservableCollection<ExerciseEntry> currentExercises = new();
 
@@ -30,10 +40,24 @@ public partial class WorkoutViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void AddExercise()
+    private async Task AddExercise()
     {
         var library = _dataService.GetExerciseLibrary();
-        var exercise = library[new Random().Next(library.Count)];
+
+        // Show exercise picker
+        var exerciseNames = library.Select(e => e.Name).ToArray();
+        var selectedExercise = await Application.Current.MainPage.DisplayActionSheet(
+            "Izberi vajo",
+            "Prekliči",
+            null,
+            exerciseNames);
+
+        if (selectedExercise == "Prekliči" || string.IsNullOrEmpty(selectedExercise))
+            return;
+
+        var exercise = library.FirstOrDefault(e => e.Name == selectedExercise);
+        if (exercise == null)
+            return;
 
         var entry = new ExerciseEntry
         {
@@ -86,11 +110,20 @@ public partial class WorkoutViewModel : BaseViewModel
 
             await _databaseService.SaveWorkoutSessionAsync(session);
 
-            // Save all sets to database
+            // Track new personal records
+            var newRecordsAchieved = new List<string>();
+
+            // Save all sets to database and check for personal records
             foreach (var exerciseEntry in CurrentExercises)
             {
-                // For now, use exercise ID 1 (you'll need to map exercises properly)
-                int exerciseId = 1;
+                // Map exercise name to ID
+                if (!_exerciseNameToId.TryGetValue(exerciseEntry.Exercise.Name, out int exerciseId))
+                {
+                    exerciseId = 1; // Default fallback
+                }
+
+                // Find the maximum weight for this exercise in this session
+                double maxWeight = exerciseEntry.Sets.Max(s => s.Weight);
 
                 for (int i = 0; i < exerciseEntry.Sets.Count; i++)
                 {
@@ -106,6 +139,18 @@ public partial class WorkoutViewModel : BaseViewModel
                     };
 
                     await _databaseService.SaveWorkoutSetAsync(workoutSet);
+                }
+
+                // Check and update personal record for this exercise
+                bool isNewRecord = await _databaseService.UpdatePersonalRecordIfBetterAsync(
+                    _currentUserId,
+                    exerciseId,
+                    maxWeight,
+                    session.SessionId);
+
+                if (isNewRecord)
+                {
+                    newRecordsAchieved.Add($"{exerciseEntry.Exercise.Name}: {maxWeight} kg");
                 }
             }
 
@@ -123,9 +168,16 @@ public partial class WorkoutViewModel : BaseViewModel
             WorkoutName = "Novi trening";
             WorkoutStartTime = DateTime.Now;
 
+            // Show success message with personal records info
+            string successMessage = "Vadba je bila shranjena!";
+            if (newRecordsAchieved.Count > 0)
+            {
+                successMessage += "\n\n🎉 Novi osebni rekordi:\n" + string.Join("\n", newRecordsAchieved);
+            }
+
             await Application.Current.MainPage.DisplayAlert(
                 "Uspešno",
-                "Vadba je bila shranjena!",
+                successMessage,
                 "V redu");
 
             await Shell.Current.GoToAsync("//HomePage");

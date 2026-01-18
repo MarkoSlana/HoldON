@@ -224,6 +224,35 @@ public class DatabaseService
         return await _database!.InsertAsync(record);
     }
 
+    public async Task<bool> UpdatePersonalRecordIfBetterAsync(int userId, int exerciseId, double weightKg, int sessionId)
+    {
+        await InitAsync();
+
+        // Get current record for this exercise (1RM)
+        var currentRecord = await GetExerciseRecordAsync(userId, exerciseId, "1RM");
+
+        // If no record exists or new weight is higher, create/update record
+        if (currentRecord == null || weightKg > currentRecord.Value)
+        {
+            var newRecord = new PersonalRecord
+            {
+                UserId = userId,
+                ExerciseId = exerciseId,
+                RecordType = "1RM",
+                Value = weightKg,
+                Unit = "kg",
+                AchievedDate = DateTime.Now,
+                SessionId = sessionId,
+                Notes = "Avtomatsko zabeleženo"
+            };
+
+            await SavePersonalRecordAsync(newRecord);
+            return true; // New record achieved
+        }
+
+        return false; // No new record
+    }
+
     // ============================================================================
     // WORKOUT PROGRAM OPERATIONS
     // ============================================================================

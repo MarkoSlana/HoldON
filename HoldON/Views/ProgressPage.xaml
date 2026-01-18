@@ -20,20 +20,20 @@
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
                             <Label Text="📅" FontSize="20"/>
-                            <Label Text="Dokončani treningi" TextColor="{StaticResource Gray400}" FontSize="12"/>
+                            <Label Text="Dokončani treningi" TextColor="{StaticResource White}" FontSize="12"/>
                         </HorizontalStackLayout>
-                        <Label Text="18" TextColor="{StaticResource White}" FontSize="32" FontAttributes="Bold"/>
-                        <Label Text="Ta mesec" TextColor="{StaticResource Gray400}" FontSize="12"/>
+                        <Label Text="{Binding CompletedWorkouts}" TextColor="{StaticResource White}" FontSize="32" FontAttributes="Bold"/>
+                        <Label Text="Vseh časov" TextColor="{StaticResource Gray400}" FontSize="12"/>
                     </VerticalStackLayout>
                 </Frame>
                 <Frame Grid.Column="1" Style="{StaticResource StrongerCard}" Padding="20">
                     <VerticalStackLayout Spacing="8">
                         <HorizontalStackLayout Spacing="8">
                             <Label Text="📈" FontSize="20"/>
-                            <Label Text="Skupni volumen" TextColor="{StaticResource Gray400}" FontSize="12"/>
+                            <Label Text="Skupni volumen" TextColor="{StaticResource White}" FontSize="12"/>
                         </HorizontalStackLayout>
-                        <Label Text="37,500" TextColor="{StaticResource White}" FontSize="32" FontAttributes="Bold"/>
-                        <Label Text="+12%" TextColor="{StaticResource Tertiary}" FontSize="12" FontAttributes="Bold"/>
+                        <Label Text="{Binding TotalVolume}" TextColor="{StaticResource White}" FontSize="32" FontAttributes="Bold"/>
+                        <Label Text="kg" TextColor="{StaticResource Tertiary}" FontSize="12" FontAttributes="Bold"/>
                     </VerticalStackLayout>
                 </Frame>
             </Grid>
@@ -129,23 +129,37 @@
                                TextColor="{StaticResource White}"
                                FontSize="18"
                                FontAttributes="Bold"/>
-                        <Grid RowDefinitions="20,20,20,20,20,20,20"
-                              ColumnDefinitions="20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20"
-                              RowSpacing="4"
-                              ColumnSpacing="4"
-                              HorizontalOptions="Start">
-                            <BoxView Grid.Row="6" Grid.Column="0" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="6" Grid.Column="1" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="6" Grid.Column="2" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="5" Grid.Column="3" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="4" Grid.Column="4" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="3" Grid.Column="4" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="2" Grid.Column="5" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="3" Grid.Column="5" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="4" Grid.Column="5" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="5" Grid.Column="5" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                            <BoxView Grid.Row="6" Grid.Column="5" Color="{StaticResource Tertiary}" CornerRadius="3"/>
-                        </Grid>
+                        <FlexLayout BindableLayout.ItemsSource="{Binding MonthDays}"
+                                    Wrap="Wrap"
+                                    JustifyContent="Start"
+                                    AlignContent="Start"
+                                    Direction="Row">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="viewmodels:DayActivityModel">
+                                    <Frame WidthRequest="30"
+                                           HeightRequest="30"
+                                           Padding="0"
+                                           Margin="2"
+                                           CornerRadius="4"
+                                           HasShadow="False"
+                                           BorderColor="Transparent">
+                                        <Frame.Triggers>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding HasWorkout}" Value="True">
+                                                <Setter Property="BackgroundColor" Value="{StaticResource Tertiary}"/>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="Frame" Binding="{Binding HasWorkout}" Value="False">
+                                                <Setter Property="BackgroundColor" Value="#1A1F2E"/>
+                                            </DataTrigger>
+                                        </Frame.Triggers>
+                                        <Label Text="{Binding Day}"
+                                               TextColor="{StaticResource White}"
+                                               FontSize="10"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"/>
+                                    </Frame>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
                     </VerticalStackLayout>
                 </Frame>
             </VerticalStackLayout>

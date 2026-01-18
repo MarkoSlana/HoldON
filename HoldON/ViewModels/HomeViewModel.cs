@@ -339,4 +339,10 @@ public partial class HomeViewModel : BaseViewModel
 
         await Shell.Current.GoToAsync(nameof(Views.WorkoutPlansPage));
     }
+
+    [RelayCommand]
+    private async Task ViewWorkoutHistory()
+    {
+        await Shell.Current.GoToAsync(nameof(Views.WorkoutHistoryPage));
+    }
 }

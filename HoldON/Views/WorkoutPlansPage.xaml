@@ -82,30 +82,47 @@
                                     <CollectionView ItemsSource="{Binding Exercises}">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate x:DataType="models:PlannedExercise">
-                                                <Grid ColumnDefinitions="*, Auto" Padding="10,5">
-                                                    <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                                        <Label Text="{Binding Name}"
-                                                               TextColor="{StaticResource White}"
-                                                               FontSize="13"/>
-                                                        <Label Text="{Binding Notes}"
-                                                               TextColor="{StaticResource Gray500}"
-                                                               FontSize="11"
-                                                               IsVisible="{Binding Notes, Converter={StaticResource IsNotNullConverter}}"/>
-                                                    </VerticalStackLayout>
-                                                    <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="End">
-                                                        <Label TextColor="{StaticResource Gray400}" FontSize="12">
-                                                            <Label.Text>
-                                                                <MultiBinding StringFormat="{}{0} × {1}">
-                                                                    <Binding Path="Sets" />
-                                                                    <Binding Path="Reps" />
-                                                                </MultiBinding>
-                                                            </Label.Text>
-                                                        </Label>
-                                                        <Label Text="{Binding RestTime, StringFormat='Počitek: {0}'}"
-                                                               TextColor="{StaticResource Gray500}"
-                                                               FontSize="10"/>
-                                                    </VerticalStackLayout>
-                                                </Grid>
+                                                <Frame BackgroundColor="Transparent"
+                                                       Padding="0"
+                                                       BorderColor="Transparent"
+                                                       HasShadow="False">
+                                                    <Frame.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenExerciseVideoCommand}"
+                                                                            CommandParameter="{Binding .}"/>
+                                                    </Frame.GestureRecognizers>
+                                                    <Grid ColumnDefinitions="*, Auto" Padding="10,5">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                            <HorizontalStackLayout Spacing="5">
+                                                                <Label Text="{Binding Name}"
+                                                                       TextColor="{StaticResource White}"
+                                                                       FontSize="13"
+                                                                       TextDecorations="Underline"/>
+                                                                <Label Text="▶"
+                                                                       TextColor="{StaticResource Primary}"
+                                                                       FontSize="10"
+                                                                       VerticalOptions="Center"
+                                                                       IsVisible="{Binding YouTubeUrl, Converter={StaticResource IsNotNullConverter}}"/>
+                                                            </HorizontalStackLayout>
+                                                            <Label Text="{Binding Notes}"
+                                                                   TextColor="{StaticResource Gray500}"
+                                                                   FontSize="11"
+                                                                   IsVisible="{Binding Notes, Converter={StaticResource IsNotNullConverter}}"/>
+                                                        </VerticalStackLayout>
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="2" HorizontalOptions="End">
+                                                            <Label TextColor="{StaticResource Gray400}" FontSize="12">
+                                                                <Label.Text>
+                                                                    <MultiBinding StringFormat="{}{0} × {1}">
+                                                                        <Binding Path="Sets" />
+                                                                        <Binding Path="Reps" />
+                                                                    </MultiBinding>
+                                                                </Label.Text>
+                                                            </Label>
+                                                            <Label Text="{Binding RestTime, StringFormat='Počitek: {0}'}"
+                                                                   TextColor="{StaticResource Gray500}"
+                                                                   FontSize="10"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Frame>
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>

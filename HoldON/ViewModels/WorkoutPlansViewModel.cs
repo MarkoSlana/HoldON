@@ -1,6 +1,7 @@
 using HoldON.Models;
 using HoldON.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 
 namespace HoldON.ViewModels;
@@ -36,6 +37,31 @@ public partial class WorkoutPlansViewModel : BaseViewModel
         if (CurrentPlan != null)
         {
             WorkoutDays = new ObservableCollection<WorkoutDay>(CurrentPlan.WorkoutDays);
+        }
+    }
+
+    [RelayCommand]
+    async Task OpenExerciseVideo(PlannedExercise exercise)
+    {
+        if (string.IsNullOrEmpty(exercise.YouTubeUrl))
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                "Video ni na voljo",
+                $"Za vajo '{exercise.Name}' video trenutno ni na voljo.",
+                "V redu");
+            return;
+        }
+
+        try
+        {
+            await Browser.Default.OpenAsync(exercise.YouTubeUrl, BrowserLaunchMode.SystemPreferred);
+        }
+        catch (Exception ex)
+        {
+            await Application.Current.MainPage.DisplayAlert(
+                "Napaka",
+                $"Napaka pri odpiranju videa: {ex.Message}",
+                "V redu");
         }
     }
 }

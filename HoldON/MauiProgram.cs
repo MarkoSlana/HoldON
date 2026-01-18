@@ -37,6 +37,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<CommunityViewModel>();
         builder.Services.AddSingleton<ProfileViewModel>();
         builder.Services.AddTransient<WorkoutPlansViewModel>();
+        builder.Services.AddTransient<WorkoutHistoryViewModel>();
 
         // Views
         builder.Services.AddSingleton<HomePage>();
@@ -45,6 +46,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<CommunityPage>();
         builder.Services.AddSingleton<ProfilePage>();
         builder.Services.AddTransient<WorkoutPlansPage>();
+        builder.Services.AddTransient<WorkoutHistoryPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

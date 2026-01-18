@@ -86,4 +86,5 @@ public class PlannedExercise
     public string Reps { get; set; } = string.Empty; // "8-12", "12-15", "AMRAP"
     public string RestTime { get; set; } = string.Empty; // "60s", "90s"
     public string Notes { get; set; } = string.Empty;
+    public string YouTubeUrl { get; set; } = string.Empty;
 }

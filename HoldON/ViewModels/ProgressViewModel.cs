@@ -6,6 +6,12 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace HoldON.ViewModels;
 
+public class DayActivityModel
+{
+    public int Day { get; set; }
+    public bool HasWorkout { get; set; }
+}
+
 public partial class ProgressViewModel : BaseViewModel
 {
     private readonly DataService _dataService;
@@ -23,6 +29,18 @@ public partial class ProgressViewModel : BaseViewModel
 
     [ObservableProperty]
     private string selectedExercise = "Bench press";
+
+    [ObservableProperty]
+    private int completedWorkouts;
+
+    [ObservableProperty]
+    private string totalVolume = "0";
+
+    [ObservableProperty]
+    private List<int> activityDays = new();
+
+    [ObservableProperty]
+    private List<DayActivityModel> monthDays = new();
 
     public ProgressViewModel(DataService dataService, DatabaseService databaseService)
     {
@@ -67,6 +85,7 @@ public partial class ProgressViewModel : BaseViewModel
             {
                 Entries = entries,
                 LabelTextSize = 30,
+                LabelColor = SKColors.White,
                 BackgroundColor = SKColors.Transparent,
                 Margin = 20
             };
@@ -95,6 +114,7 @@ public partial class ProgressViewModel : BaseViewModel
             {
                 Entries = entries,
                 LabelTextSize = 30,
+                LabelColor = SKColors.White,
                 BackgroundColor = SKColors.Transparent,
                 Margin = 20,
                 LineMode = LineMode.Straight,
@@ -117,6 +137,70 @@ public partial class ProgressViewModel : BaseViewModel
         if (ExerciseChart == null)
         {
             LoadExerciseChart();
+        }
+        await LoadStatistics();
+        await LoadActivityDays();
+    }
+
+    private async Task LoadStatistics()
+    {
+        try
+        {
+            var sessions = await _databaseService.GetUserWorkoutSessionsAsync(_currentUserId);
+            CompletedWorkouts = sessions.Count;
+
+            double totalVolumeKg = 0;
+            foreach (var session in sessions)
+            {
+                var sets = await _databaseService.GetSessionSetsAsync(session.SessionId);
+                totalVolumeKg += sets.Sum(s => (s.WeightKg ?? 0) * (s.Reps ?? 0));
+            }
+
+            TotalVolume = totalVolumeKg >= 1000
+                ? $"{totalVolumeKg / 1000:N1}k"
+                : $"{totalVolumeKg:N0}";
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading statistics: {ex.Message}");
+            CompletedWorkouts = 0;
+            TotalVolume = "0";
+        }
+    }
+
+    private async Task LoadActivityDays()
+    {
+        try
+        {
+            var sessions = await _databaseService.GetUserWorkoutSessionsAsync(_currentUserId);
+            var currentMonth = DateTime.Now.Month;
+            var currentYear = DateTime.Now.Year;
+
+            var workoutDaysThisMonth = sessions
+                .Where(s => s.SessionDate.Month == currentMonth && s.SessionDate.Year == currentYear)
+                .Select(s => s.SessionDate.Day)
+                .Distinct()
+                .ToHashSet();
+
+            // Get days in current month
+            var daysInMonth = DateTime.DaysInMonth(currentYear, currentMonth);
+            var daysList = new List<DayActivityModel>();
+
+            for (int day = 1; day <= daysInMonth; day++)
+            {
+                daysList.Add(new DayActivityModel
+                {
+                    Day = day,
+                    HasWorkout = workoutDaysThisMonth.Contains(day)
+                });
+            }
+
+            MonthDays = daysList;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error loading activity days: {ex.Message}");
+            MonthDays = new List<DayActivityModel>();
         }
     }
 
@@ -159,6 +243,7 @@ public partial class ProgressViewModel : BaseViewModel
                 {
                     Entries = entries,
                     LabelTextSize = 30,
+                    LabelColor = SKColors.White,
                     BackgroundColor = SKColors.Transparent,
                     Margin = 20
                 };

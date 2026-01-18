@@ -234,27 +234,57 @@
                         <Button Text="Bench press"
                                 Command="{Binding SelectExerciseCommand}"
                                 CommandParameter="Bench press"
-                                BackgroundColor="{StaticResource Primary}"
-                                TextColor="{StaticResource White}"
                                 CornerRadius="20"
                                 HeightRequest="40"
-                                Padding="20,0"/>
+                                Padding="20,0"
+                                TextColor="{StaticResource White}"
+                                FontAttributes="Bold">
+                            <Button.BackgroundColor>
+                                <Binding Path="SelectedExercise" ConverterParameter="Bench press">
+                                    <Binding.Converter>
+                                        <converters:StringComparisonConverter x:TypeArguments="Color"
+                                            TrueValue="#3B82F6"
+                                            FalseValue="#1A1F2E"/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.BackgroundColor>
+                        </Button>
                         <Button Text="Počep"
                                 Command="{Binding SelectExerciseCommand}"
                                 CommandParameter="Počep"
-                                BackgroundColor="{StaticResource Surface}"
-                                TextColor="{StaticResource White}"
                                 CornerRadius="20"
                                 HeightRequest="40"
-                                Padding="20,0"/>
+                                Padding="20,0"
+                                TextColor="{StaticResource White}"
+                                FontAttributes="Bold">
+                            <Button.BackgroundColor>
+                                <Binding Path="SelectedExercise" ConverterParameter="Počep">
+                                    <Binding.Converter>
+                                        <converters:StringComparisonConverter x:TypeArguments="Color"
+                                            TrueValue="#3B82F6"
+                                            FalseValue="#1A1F2E"/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.BackgroundColor>
+                        </Button>
                         <Button Text="Mrtvi dvig"
                                 Command="{Binding SelectExerciseCommand}"
                                 CommandParameter="Mrtvi dvig"
-                                BackgroundColor="{StaticResource Surface}"
-                                TextColor="{StaticResource White}"
                                 CornerRadius="20"
                                 HeightRequest="40"
-                                Padding="20,0"/>
+                                Padding="20,0"
+                                TextColor="{StaticResource White}"
+                                FontAttributes="Bold">
+                            <Button.BackgroundColor>
+                                <Binding Path="SelectedExercise" ConverterParameter="Mrtvi dvig">
+                                    <Binding.Converter>
+                                        <converters:StringComparisonConverter x:TypeArguments="Color"
+                                            TrueValue="#3B82F6"
+                                            FalseValue="#1A1F2E"/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </Button.BackgroundColor>
+                        </Button>
                     </HorizontalStackLayout>
                 </ScrollView>
 

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:HoldON.ViewModels"
+             xmlns:models="clr-namespace:HoldON.Models"
+             x:DataType="viewmodels:WorkoutHistoryViewModel"
+             x:Class="HoldON.Views.WorkoutHistoryPage"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Header -->
+        <Grid Grid.Row="0" Padding="20,10" BackgroundColor="{StaticResource Background}">
+            <Label Text="Zgodovina treningov"
+                   TextColor="{StaticResource White}"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Content -->
+        <ScrollView Grid.Row="1" Padding="20,0">
+            <VerticalStackLayout Spacing="15">
+                <!-- Stats Summary -->
+                <Grid ColumnDefinitions="*, *" ColumnSpacing="15" Margin="0,10,0,20">
+                    <Frame Grid.Column="0" Style="{StaticResource StrongerCard}" Padding="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Skupaj treningov"
+                                   TextColor="{StaticResource Gray400}"
+                                   FontSize="12"/>
+                            <Label Text="{Binding TotalWorkouts}"
+                                   TextColor="{StaticResource White}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    <Frame Grid.Column="1" Style="{StaticResource StrongerCard}" Padding="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Ta mesec"
+                                   TextColor="{StaticResource Gray400}"
+                                   FontSize="12"/>
+                            <Label Text="{Binding WorkoutsThisMonth}"
+                                   TextColor="{StaticResource Primary}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Workouts List -->
+                <CollectionView ItemsSource="{Binding WorkoutSessions}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewmodels:WorkoutSessionDisplay">
+                            <Frame Style="{StaticResource StrongerCard}"
+                                   Padding="15"
+                                   Margin="0,0,0,10">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:WorkoutHistoryViewModel}}, Path=ShowWorkoutDetailsCommand}"
+                                                        CommandParameter="{Binding .}"/>
+                                </Frame.GestureRecognizers>
+                                <VerticalStackLayout Spacing="10">
+                                    <!-- Header -->
+                                    <Grid ColumnDefinitions="*, Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                            <Label Text="{Binding DisplayDate}"
+                                                   TextColor="{StaticResource White}"
+                                                   FontSize="16"
+                                                   FontAttributes="Bold"/>
+                                            <Label Text="{Binding DisplayTime}"
+                                                   TextColor="{StaticResource Gray400}"
+                                                   FontSize="12"/>
+                                        </VerticalStackLayout>
+                                        <Frame Grid.Column="1"
+                                               BackgroundColor="{StaticResource Primary}"
+                                               Padding="10,5"
+                                               CornerRadius="10"
+                                               HasShadow="False"
+                                               BorderColor="Transparent"
+                                               VerticalOptions="Start">
+                                            <Label Text="{Binding DurationMinutes, StringFormat='{0} min'}"
+                                                   TextColor="{StaticResource White}"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"/>
+                                        </Frame>
+                                    </Grid>
+
+                                    <!-- Notes -->
+                                    <Label Text="{Binding Notes}"
+                                           TextColor="{StaticResource Gray400}"
+                                           FontSize="13"
+                                           IsVisible="{Binding HasNotes}"/>
+
+                                    <!-- Exercises Summary -->
+                                    <Label Text="{Binding ExercisesSummary}"
+                                           TextColor="{StaticResource White}"
+                                           FontSize="13"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <!-- Stats -->
+                                    <Grid ColumnDefinitions="*, *, *" ColumnSpacing="10" Margin="0,5,0,0">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="Serije"
+                                                   TextColor="{StaticResource Gray500}"
+                                                   FontSize="10"/>
+                                            <Label Text="{Binding TotalSets}"
+                                                   TextColor="{StaticResource White}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                            <Label Text="Vaje"
+                                                   TextColor="{StaticResource Gray500}"
+                                                   FontSize="10"/>
+                                            <Label Text="{Binding TotalExercises}"
+                                                   TextColor="{StaticResource White}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                        </VerticalStackLayout>
+                                        <VerticalStackLayout Grid.Column="2" Spacing="2">
+                                            <Label Text="Volumen"
+                                                   TextColor="{StaticResource Gray500}"
+                                                   FontSize="10"/>
+                                            <Label Text="{Binding TotalVolume}"
+                                                   TextColor="{StaticResource Primary}"
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"/>
+                                        </VerticalStackLayout>
+                                    </Grid>
+
+                                    <!-- View Details Arrow -->
+                                    <Label Text="Prikaži podrobnosti →"
+                                           TextColor="{StaticResource Primary}"
+                                           FontSize="12"
+                                           HorizontalOptions="End"
+                                           Margin="0,5,0,0"/>
+                                </VerticalStackLayout>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Empty State -->
+                <VerticalStackLayout Spacing="15"
+                                   IsVisible="{Binding HasNoWorkouts}"
+                                   Padding="20"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="0,50,0,0">
+                    <Label Text="📊"
+                           FontSize="64"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Še ni zabeleženih treningov"
+                           TextColor="{StaticResource Gray400}"
+                           FontSize="16"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Začni vadbo in zabeleži svoj prvi trening!"
+                           TextColor="{StaticResource Gray500}"
+                           FontSize="13"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="20"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
