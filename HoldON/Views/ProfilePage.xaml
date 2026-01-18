@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:HoldON.ViewModels"
-             x:DataType="viewmodels:ProfileViewModel"
              x:Class="HoldON.Views.ProfilePage"
              BackgroundColor="{StaticResource Background}">
 
@@ -10,7 +9,7 @@
         <VerticalStackLayout Spacing="20" Padding="20">
             <!-- Header -->
             <Grid ColumnDefinitions="*, Auto">
-                <Label Grid.Column="0" Text="Profil" TextColor="{StaticResource White}" FontSize="28" FontAttributes="Bold"/>
+                <Label Grid.Column="0" Text="{Binding Lang.Profile}" TextColor="{StaticResource White}" FontSize="28" FontAttributes="Bold"/>
                 <Label Grid.Column="1" Text="⚙" FontSize="24" TextColor="{StaticResource White}"/>
             </Grid>
 
@@ -35,7 +34,7 @@
                         </VerticalStackLayout>
                     </Grid>
 
-                    <Button Text="Uredi profil"
+                    <Button Text="{Binding Lang.EditProfile}"
                             BackgroundColor="{StaticResource White}"
                             TextColor="{StaticResource Primary}"
                             CornerRadius="20"
@@ -67,7 +66,7 @@
             </Grid>
 
             <!-- Cilji -->
-            <Label Text="Cilji" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.Goals}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="20">
                 <VerticalStackLayout Spacing="15">
                     <VerticalStackLayout Spacing="8">
@@ -97,78 +96,78 @@
             </Frame>
 
             <!-- Vadbeni program -->
-            <Label Text="Vadbeni program" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.WorkoutProgram}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="0">
                 <VerticalStackLayout Spacing="0">
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🎯" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Cilj" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Goals}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <HorizontalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="{Binding Profile.FitnessGoal}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
+                            <Label Text="{Binding VM.Profile.FitnessGoal}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
                             <Label Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                         </HorizontalStackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SetFitnessGoalCommand}" />
+                            <TapGestureRecognizer Command="{Binding VM.SetFitnessGoalCommand}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🏋️" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Oprema" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Equipment}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <HorizontalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="{Binding Profile.EquipmentAvailable}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
+                            <Label Text="{Binding VM.Profile.EquipmentAvailable}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
                             <Label Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                         </HorizontalStackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SetEquipmentCommand}" />
+                            <TapGestureRecognizer Command="{Binding VM.SetEquipmentCommand}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="📊" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Raven" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Level}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <HorizontalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="{Binding Profile.ExperienceLevel}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
+                            <Label Text="{Binding VM.Profile.ExperienceLevel}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
                             <Label Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                         </HorizontalStackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SetExperienceLevelCommand}" />
+                            <TapGestureRecognizer Command="{Binding VM.SetExperienceLevelCommand}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="📅" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Treningi/teden" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.WorkoutsPerWeek}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <HorizontalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="{Binding Profile.WorkoutDaysPerWeek, StringFormat='{0} dni'}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
+                            <Label Text="{Binding VM.Profile.WorkoutDaysPerWeek, StringFormat='{0} dni'}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
                             <Label Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                         </HorizontalStackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding SetWorkoutDaysCommand}" />
+                            <TapGestureRecognizer Command="{Binding VM.SetWorkoutDaysCommand}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Prehrana -->
-            <Label Text="Prehrana" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.Nutrition}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="20">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding AddNutritionCommand}" />
+                    <TapGestureRecognizer Command="{Binding VM.AddNutritionCommand}" />
                 </Frame.GestureRecognizers>
                 <VerticalStackLayout Spacing="15">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="🥗" FontSize="24"/>
                         <VerticalStackLayout Spacing="2">
-                            <Label Text="Dnevne kalorije" TextColor="{StaticResource Gray400}" FontSize="12"/>
+                            <Label Text="{Binding Lang.DailyCalories}" TextColor="{StaticResource Gray400}" FontSize="12"/>
                             <Label TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold">
                                 <Label.Text>
                                     <MultiBinding StringFormat="{}{0:F0} / {1:F0}">
-                                        <Binding Path="Profile.CurrentCalories" />
-                                        <Binding Path="Profile.TargetCalories" />
+                                        <Binding Path="VM.Profile.CurrentCalories" />
+                                        <Binding Path="VM.Profile.TargetCalories" />
                                     </MultiBinding>
                                 </Label.Text>
                             </Label>
@@ -176,36 +175,36 @@
                     </HorizontalStackLayout>
 
                     <Grid ColumnDefinitions="*, Auto" Margin="0,5,0,0">
-                        <Label Grid.Column="0" Text="Beljakovine" TextColor="{StaticResource White}" FontSize="12"/>
+                        <Label Grid.Column="0" Text="{Binding Lang.Protein}" TextColor="{StaticResource White}" FontSize="12"/>
                         <Label Grid.Column="1" TextColor="{StaticResource Gray400}" FontSize="12">
                             <Label.Text>
                                 <MultiBinding StringFormat="{}{0:F0}g / {1:F0}g">
-                                    <Binding Path="Profile.CurrentProtein" />
-                                    <Binding Path="Profile.TargetProtein" />
+                                    <Binding Path="VM.Profile.CurrentProtein" />
+                                    <Binding Path="VM.Profile.TargetProtein" />
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
                     </Grid>
 
                     <Grid ColumnDefinitions="*, Auto">
-                        <Label Grid.Column="0" Text="Ogljikovi hidrati" TextColor="{StaticResource White}" FontSize="12"/>
+                        <Label Grid.Column="0" Text="{Binding Lang.Carbs}" TextColor="{StaticResource White}" FontSize="12"/>
                         <Label Grid.Column="1" TextColor="{StaticResource Gray400}" FontSize="12">
                             <Label.Text>
                                 <MultiBinding StringFormat="{}{0:F0}g / {1:F0}g">
-                                    <Binding Path="Profile.CurrentCarbs" />
-                                    <Binding Path="Profile.TargetCarbs" />
+                                    <Binding Path="VM.Profile.CurrentCarbs" />
+                                    <Binding Path="VM.Profile.TargetCarbs" />
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
                     </Grid>
 
                     <Grid ColumnDefinitions="*, Auto">
-                        <Label Grid.Column="0" Text="Maščobe" TextColor="{StaticResource White}" FontSize="12"/>
+                        <Label Grid.Column="0" Text="{Binding Lang.Fats}" TextColor="{StaticResource White}" FontSize="12"/>
                         <Label Grid.Column="1" TextColor="{StaticResource Gray400}" FontSize="12">
                             <Label.Text>
                                 <MultiBinding StringFormat="{}{0:F0}g / {1:F0}g">
-                                    <Binding Path="Profile.CurrentFats" />
-                                    <Binding Path="Profile.TargetFats" />
+                                    <Binding Path="VM.Profile.CurrentFats" />
+                                    <Binding Path="VM.Profile.TargetFats" />
                                 </MultiBinding>
                             </Label.Text>
                         </Label>
@@ -214,71 +213,71 @@
             </Frame>
 
             <!-- Nastavitve -->
-            <Label Text="Nastavitve" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.Settings}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="0">
                 <VerticalStackLayout Spacing="0">
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🌐" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Jezik" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Language}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <HorizontalStackLayout Grid.Column="2" Spacing="5">
-                            <Label Text="{Binding CurrentLanguage}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
+                            <Label Text="{Binding VM.CurrentLanguage}" TextColor="{StaticResource Gray400}" VerticalOptions="Center" FontSize="14"/>
                             <Label Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                         </HorizontalStackLayout>
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding ChangeLanguageCommand}" />
+                            <TapGestureRecognizer Command="{Binding VM.ChangeLanguageCommand}" />
                         </Grid.GestureRecognizers>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🔔" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Obvestila" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Notifications}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Switch Grid.Column="2" IsToggled="True" OnColor="{StaticResource Primary}"/>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🌙" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Temni način" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.DarkMode}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Switch Grid.Column="2" IsToggled="True" OnColor="{StaticResource Primary}"/>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="🏆" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Dosežki" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Achievements}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Label Grid.Column="2" Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="⚙" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Nastavitve ciljev" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.GoalSettings}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Label Grid.Column="2" Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Podpora -->
-            <Label Text="Podpora" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.Support}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" Margin="0,10,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="0">
                 <VerticalStackLayout Spacing="0">
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="❓" FontSize="20"/>
-                        <Label Grid.Column="1" Text="Pomoč" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.Help}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Label Grid.Column="2" Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="Auto, *, Auto" Padding="20,15" ColumnSpacing="15">
                         <Label Grid.Column="0" Text="ℹ" FontSize="20"/>
-                        <Label Grid.Column="1" Text="O aplikaciji" TextColor="{StaticResource White}" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Lang.About}" TextColor="{StaticResource White}" VerticalOptions="Center"/>
                         <Label Grid.Column="2" Text="›" TextColor="{StaticResource Gray400}" FontSize="18"/>
                     </Grid>
                     <BoxView HeightRequest="1" BackgroundColor="{StaticResource Gray600}" Margin="20,0"/>
 
                     <Grid ColumnDefinitions="*, Auto" Padding="20,15">
-                        <Label Grid.Column="0" Text="Odjava" TextColor="{StaticResource Danger}" VerticalOptions="Center"/>
+                        <Label Grid.Column="0" Text="{Binding Lang.Logout}" TextColor="{StaticResource Danger}" VerticalOptions="Center"/>
                     </Grid>
                 </VerticalStackLayout>
             </Frame>

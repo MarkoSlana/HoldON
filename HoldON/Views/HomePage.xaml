@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:HoldON.ViewModels"
              xmlns:models="clr-namespace:HoldON.Models"
-             x:DataType="viewmodels:HomeViewModel"
              x:Class="HoldON.Views.HomePage"
              BackgroundColor="{StaticResource Background}">
     
@@ -18,12 +17,12 @@
                 <VerticalStackLayout Spacing="15">
                     <Grid ColumnDefinitions="*, Auto">
                         <VerticalStackLayout Grid.Column="0">
-                            <Label Text="Pozdravljeni," 
+                            <Label Text="{Binding Lang.Welcome}"
                                    TextColor="#A0C4FF"
                                    FontSize="14"/>
-                            <Label Text="{Binding Profile.Name}" 
-                                   TextColor="{StaticResource White}" 
-                                   FontSize="24" 
+                            <Label Text="{Binding VM.Profile.Name}"
+                                   TextColor="{StaticResource White}"
+                                   FontSize="24"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                         <Image Grid.Column="1" 
@@ -36,8 +35,8 @@
                         </Image>
                     </Grid>
                     
-                    <Button Text="ZAČNI NOV TRENING" 
-                            Command="{Binding StartWorkoutCommand}"
+                    <Button Text="{Binding Lang.StartNewWorkout}"
+                            Command="{Binding VM.StartWorkoutCommand}"
                             BackgroundColor="{StaticResource White}"
                             TextColor="{StaticResource Primary}"
                             CornerRadius="20"
@@ -52,10 +51,10 @@
                     <VerticalStackLayout Spacing="5">
                         <HorizontalStackLayout Spacing="5">
                             <BoxView Color="{StaticResource Primary}" WidthRequest="8" HeightRequest="8" CornerRadius="4" VerticalOptions="Center"/>
-                            <Label Text="Skupaj teža" Style="{StaticResource SmallCaption}"/>
+                            <Label Text="{Binding Lang.TotalWeight}" Style="{StaticResource SmallCaption}"/>
                         </HorizontalStackLayout>
-                        <Label Text="{Binding TotalVolumeFormatted}" TextColor="{StaticResource White}" FontSize="20" FontAttributes="Bold"/>
-                        <Label Text="{Binding WeightProgressPercent}" TextColor="{StaticResource Tertiary}" FontSize="12"/>
+                        <Label Text="{Binding VM.TotalVolumeFormatted}" TextColor="{StaticResource White}" FontSize="20" FontAttributes="Bold"/>
+                        <Label Text="{Binding VM.WeightProgressPercent}" TextColor="{StaticResource Tertiary}" FontSize="12"/>
                     </VerticalStackLayout>
                 </Frame>
 
@@ -63,29 +62,36 @@
                     <VerticalStackLayout Spacing="5">
                         <HorizontalStackLayout Spacing="5">
                             <BoxView Color="#FFB703" WidthRequest="8" HeightRequest="8" CornerRadius="4" VerticalOptions="Center"/>
-                            <Label Text="Treningi" Style="{StaticResource SmallCaption}"/>
+                            <Label Text="{Binding Lang.Workouts}" Style="{StaticResource SmallCaption}"/>
                         </HorizontalStackLayout>
-                        <Label Text="{Binding TotalWorkoutsThisMonth}" TextColor="{StaticResource White}" FontSize="20" FontAttributes="Bold"/>
-                        <Label Text="{Binding WorkoutsThisWeek, StringFormat='{0} ta teden'}" TextColor="{StaticResource Gray400}" FontSize="12"/>
+                        <Label Text="{Binding VM.TotalWorkoutsThisMonth}" TextColor="{StaticResource White}" FontSize="20" FontAttributes="Bold"/>
+                        <Label TextColor="{StaticResource Gray400}" FontSize="12">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="VM.WorkoutsThisWeek" />
+                                    <Binding Path="Lang.ThisWeek" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
                     </VerticalStackLayout>
                 </Frame>
             </Grid>
 
             <!-- Rest Timer & Wellness -->
-            <Label Text="Regeneracija" Style="{StaticResource SectionHeader}" Margin="0,10,0,0"/>
+            <Label Text="{Binding Lang.Recovery}" Style="{StaticResource SectionHeader}" Margin="0,10,0,0"/>
             <Grid ColumnDefinitions="*, *" ColumnSpacing="15">
                 <!-- Rest Timer Card -->
                 <Frame Grid.Column="0" Style="{StaticResource StrongerCard}" Padding="15">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding StartRestTimerCommand}" />
+                        <TapGestureRecognizer Command="{Binding VM.StartRestTimerCommand}" />
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Label Text="⏱" FontSize="24" HorizontalOptions="Center"/>
-                        <Label Text="Časovnik počitka" TextColor="{StaticResource Gray400}" FontSize="11" HorizontalTextAlignment="Center"/>
-                        <Label Text="{Binding RestTimerDisplay}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
-                        <Button Text="{Binding IsRestTimerRunning, Converter={StaticResource BoolToTextConverter}}"
-                                Command="{Binding StopRestTimerCommand}"
-                                IsVisible="{Binding IsRestTimerRunning}"
+                        <Label Text="{Binding Lang.RestTimer}" TextColor="{StaticResource Gray400}" FontSize="11" HorizontalTextAlignment="Center"/>
+                        <Label Text="{Binding VM.RestTimerDisplay}" TextColor="{StaticResource White}" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                        <Button Text="{Binding VM.IsRestTimerRunning, Converter={StaticResource BoolToTextConverter}}"
+                                Command="{Binding VM.StopRestTimerCommand}"
+                                IsVisible="{Binding VM.IsRestTimerRunning}"
                                 BackgroundColor="{StaticResource Danger}"
                                 TextColor="{StaticResource White}"
                                 FontSize="10"
@@ -98,44 +104,50 @@
                 <!-- Wellness Card -->
                 <Frame Grid.Column="1" Style="{StaticResource StrongerCard}" Padding="15">
                     <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding LogWellnessCommand}" />
+                        <TapGestureRecognizer Command="{Binding VM.LogWellnessCommand}" />
                     </Frame.GestureRecognizers>
                     <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
                         <Label Text="😴" FontSize="24" HorizontalOptions="Center"/>
-                        <Label Text="Počutje/Spanec" TextColor="{StaticResource Gray400}" FontSize="11" HorizontalTextAlignment="Center"/>
-                        <Label Text="{Binding TodaysWellness.SleepHours, StringFormat='{0:F1}h spanca'}"
-                               TextColor="{StaticResource White}"
+                        <Label Text="{Binding Lang.WellnessSleep}" TextColor="{StaticResource Gray400}" FontSize="11" HorizontalTextAlignment="Center"/>
+                        <Label TextColor="{StaticResource White}"
                                FontSize="12"
                                HorizontalTextAlignment="Center"
-                               IsVisible="{Binding TodaysWellness, Converter={StaticResource IsNotNullConverter}}"/>
-                        <Label Text="Ni beleženo"
+                               IsVisible="{Binding VM.TodaysWellness, Converter={StaticResource IsNotNullConverter}}">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0:F1}{1}">
+                                    <Binding Path="VM.TodaysWellness.SleepHours" />
+                                    <Binding Path="Lang.SleepHours" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label Text="{Binding Lang.NotLogged}"
                                TextColor="{StaticResource Gray400}"
                                FontSize="12"
                                HorizontalTextAlignment="Center"
-                               IsVisible="{Binding TodaysWellness, Converter={StaticResource IsNullConverter}}"/>
-                        <HorizontalStackLayout Spacing="2" HorizontalOptions="Center" IsVisible="{Binding TodaysWellness, Converter={StaticResource IsNotNullConverter}}">
+                               IsVisible="{Binding VM.TodaysWellness, Converter={StaticResource IsNullConverter}}"/>
+                        <HorizontalStackLayout Spacing="2" HorizontalOptions="Center" IsVisible="{Binding VM.TodaysWellness, Converter={StaticResource IsNotNullConverter}}">
                             <Label Text="😊" FontSize="14"/>
-                            <Label Text="{Binding TodaysWellness.MoodRating, StringFormat='{0}/5'}" TextColor="{StaticResource Tertiary}" FontSize="11"/>
+                            <Label Text="{Binding VM.TodaysWellness.MoodRating, StringFormat='{0}/5'}" TextColor="{StaticResource Tertiary}" FontSize="11"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
                 </Frame>
             </Grid>
 
             <!-- Moj program -->
-            <Label Text="Moj program" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
+            <Label Text="{Binding Lang.MyProgram}" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
             <Frame Style="{StaticResource StrongerCard}" Padding="20">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ViewWorkoutPlanCommand}" />
+                    <TapGestureRecognizer Command="{Binding VM.ViewWorkoutPlanCommand}" />
                 </Frame.GestureRecognizers>
                 <VerticalStackLayout Spacing="15">
                     <HorizontalStackLayout Spacing="10">
                         <Label Text="📋" FontSize="28"/>
                         <VerticalStackLayout Spacing="2" VerticalOptions="Center">
-                            <Label Text="{Binding CurrentWorkoutPlan.Name}"
+                            <Label Text="{Binding VM.CurrentWorkoutPlan.Name}"
                                    TextColor="{StaticResource White}"
                                    FontSize="16"
                                    FontAttributes="Bold"/>
-                            <Label Text="{Binding CurrentWorkoutPlan.Goal}"
+                            <Label Text="{Binding VM.CurrentWorkoutPlan.Goal}"
                                    TextColor="{StaticResource Gray400}"
                                    FontSize="12"/>
                         </VerticalStackLayout>
@@ -149,18 +161,18 @@
                                FontSize="20"
                                VerticalOptions="Center"/>
                         <VerticalStackLayout Grid.Column="1" Spacing="2">
-                            <Label Text="Danes"
+                            <Label Text="{Binding Lang.Today}"
                                    TextColor="{StaticResource Gray400}"
                                    FontSize="11"/>
-                            <Label Text="{Binding TodaysWorkoutSummary}"
+                            <Label Text="{Binding VM.TodaysWorkoutSummary}"
                                    TextColor="{StaticResource Primary}"
                                    FontSize="14"
                                    FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </Grid>
 
-                    <Button Text="Poglej celoten program"
-                            Command="{Binding ViewWorkoutPlanCommand}"
+                    <Button Text="{Binding Lang.ViewFullProgram}"
+                            Command="{Binding VM.ViewWorkoutPlanCommand}"
                             BackgroundColor="{StaticResource Primary}"
                             TextColor="{StaticResource White}"
                             CornerRadius="15"
@@ -173,7 +185,7 @@
             <!-- Zgodovina treningov -->
             <Frame Style="{StaticResource StrongerCard}" Padding="20" Margin="0,10,0,0">
                 <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ViewWorkoutHistoryCommand}" />
+                    <TapGestureRecognizer Command="{Binding VM.ViewWorkoutHistoryCommand}" />
                 </Frame.GestureRecognizers>
                 <Grid ColumnDefinitions="Auto, *, Auto">
                     <Label Grid.Column="0"
@@ -182,11 +194,11 @@
                            VerticalOptions="Center"
                            Margin="0,0,15,0"/>
                     <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
-                        <Label Text="Zgodovina treningov"
+                        <Label Text="{Binding Lang.WorkoutHistory}"
                                TextColor="{StaticResource White}"
                                FontSize="16"
                                FontAttributes="Bold"/>
-                        <Label Text="Pregled vseh shranjenih treningov"
+                        <Label Text="{Binding Lang.ViewAllWorkouts}"
                                TextColor="{StaticResource Gray400}"
                                FontSize="12"/>
                     </VerticalStackLayout>
@@ -200,15 +212,27 @@
 
             <!-- Dosežki -->
             <Grid ColumnDefinitions="*, Auto" Margin="0,10,0,0">
-                <Label Grid.Column="0" Text="Dosežki" Style="{StaticResource SectionHeader}"/>
-                <Label Grid.Column="1" Text="Poglej vse ›" TextColor="{StaticResource Primary}" FontSize="12" VerticalOptions="Center"/>
+                <Label Grid.Column="0" Text="{Binding Lang.Achievements}" Style="{StaticResource SectionHeader}"/>
+                <Label Grid.Column="1" TextColor="{StaticResource Primary}" FontSize="12" VerticalOptions="Center">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}{0} ›">
+                            <Binding Path="Lang.ViewAll" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
             </Grid>
             <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
                 <HorizontalStackLayout Spacing="15">
                     <Frame BackgroundColor="{StaticResource Orange}" CornerRadius="15" WidthRequest="110" HeightRequest="130" Padding="15" HasShadow="False">
                         <VerticalStackLayout Spacing="8" VerticalOptions="Center">
                             <Label Text="🔥" FontSize="32" HorizontalOptions="Center"/>
-                            <Label Text="7 dni" TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                            <Label TextColor="White" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center">
+                                <Label.Text>
+                                    <MultiBinding StringFormat="7 {0}">
+                                        <Binding Path="Lang.Days" />
+                                    </MultiBinding>
+                                </Label.Text>
+                            </Label>
                         </VerticalStackLayout>
                     </Frame>
                     <Frame BackgroundColor="{StaticResource Purple}" CornerRadius="15" WidthRequest="110" HeightRequest="130" Padding="15" HasShadow="False">
@@ -228,12 +252,12 @@
             </ScrollView>
 
             <!-- Osebni rekordi -->
-            <Label Text="Osebni rekordi" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
+            <Label Text="{Binding Lang.PersonalRecords}" Style="{StaticResource SectionHeader}" Margin="0,20,0,0"/>
             <VerticalStackLayout Spacing="10">
                 <Frame Style="{StaticResource StrongerCard}">
                     <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0" Spacing="5">
-                            <Label Text="Bench press" TextColor="{StaticResource White}" FontSize="14"/>
+                            <Label Text="{Binding Lang.BenchPress}" TextColor="{StaticResource White}" FontSize="14"/>
                             <Label Text="95 kg" TextColor="{StaticResource White}" FontSize="24" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                         <Label Grid.Column="1" Text="+5 kg" TextColor="{StaticResource Tertiary}" FontSize="12" VerticalOptions="End"/>
@@ -243,7 +267,7 @@
                 <Frame Style="{StaticResource StrongerCard}">
                     <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0" Spacing="5">
-                            <Label Text="Počep" TextColor="{StaticResource White}" FontSize="14"/>
+                            <Label Text="{Binding Lang.Squat}" TextColor="{StaticResource White}" FontSize="14"/>
                             <Label Text="120 kg" TextColor="{StaticResource White}" FontSize="24" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                         <Label Grid.Column="1" Text="+10 kg" TextColor="{StaticResource Tertiary}" FontSize="12" VerticalOptions="End"/>
@@ -253,7 +277,7 @@
                 <Frame Style="{StaticResource StrongerCard}">
                     <Grid ColumnDefinitions="*, Auto, Auto" ColumnSpacing="15">
                         <VerticalStackLayout Grid.Column="0" Spacing="5">
-                            <Label Text="Mrtvi dvig" TextColor="{StaticResource White}" FontSize="14"/>
+                            <Label Text="{Binding Lang.Deadlift}" TextColor="{StaticResource White}" FontSize="14"/>
                             <Label Text="140 kg" TextColor="{StaticResource White}" FontSize="24" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                         <Label Grid.Column="1" Text="+15 kg" TextColor="{StaticResource Tertiary}" FontSize="12" VerticalOptions="End"/>

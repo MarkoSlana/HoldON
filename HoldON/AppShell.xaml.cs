@@ -1,11 +1,16 @@
 ﻿using HoldON.Views;
+using HoldON.Services;
 
 namespace HoldON;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    private readonly LanguageService _languageService;
+
+    public AppShell(LanguageService languageService)
     {
+        _languageService = languageService;
+        BindingContext = _languageService;
         InitializeComponent();
 
         // Register routes

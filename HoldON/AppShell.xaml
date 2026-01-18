@@ -41,13 +41,13 @@
     </Shell.Resources>
 
     <TabBar>
-        <Tab Title="Domov">
+        <Tab Title="{Binding HomeTab}">
             <Tab.Icon>
                 <FontImageSource Glyph="🏠" FontFamily="Arial" Size="24"/>
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage" />
         </Tab>
-        <Tab Title="Napredek">
+        <Tab Title="{Binding Progress}">
             <Tab.Icon>
                 <FontImageSource Glyph="📊" FontFamily="Arial" Size="24"/>
             </Tab.Icon>
@@ -59,13 +59,13 @@
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:WorkoutPage}" Route="WorkoutPage" />
         </Tab>
-        <Tab Title="Skupnost">
+        <Tab Title="{Binding Community}">
             <Tab.Icon>
                 <FontImageSource Glyph="👥" FontFamily="Arial" Size="24"/>
             </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:CommunityPage}" Route="CommunityPage" />
         </Tab>
-        <Tab Title="Profil">
+        <Tab Title="{Binding Profile}">
             <Tab.Icon>
                 <FontImageSource Glyph="👤" FontFamily="Arial" Size="24"/>
             </Tab.Icon>
